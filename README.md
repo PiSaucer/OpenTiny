@@ -1,2 +1,3 @@
-# OpenLink
-Open Source Static URL Shorter
+# OpenTiny
+
+Open Source Static Tiny URL Shorter
