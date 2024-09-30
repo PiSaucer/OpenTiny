@@ -1,4 +1,10 @@
 {
+  "index": {
+    "url": "https://github.com/PiSaucer/OpenTiny",
+    "title": "PiSaucer/OpenTiny",
+    "description": "Open Source Static Tiny URL Shorter",
+    "comment": "This special index case is used to display the main page of the URL shortener."
+  },
   "shortname": {
     "url": "https://example.com",
     "image": "https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg",

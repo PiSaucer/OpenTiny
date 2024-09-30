@@ -69,15 +69,19 @@ def main():
                 description = value.get('description', key)
                 image = value.get('image', '')
 
-                folder_path = os.path.join(parent_folder, key)
-                if not os.path.exists(folder_path):
-                    os.makedirs(folder_path)
-                    if print_details: print(f"Folder '{folder_path}' created.")
+                # Special case for the index key
+                if key == "index":
+                    index_file_path = os.path.join(parent_folder, 'index.html')
                 else:
-                    if print_details: print(f"Folder '{folder_path}' already exists.")
-
-                # Create index.html in the folder from the template
-                index_file_path = os.path.join(folder_path, 'index.html')
+                    # Create a folder for the key
+                    folder_path = os.path.join(parent_folder, key)
+                    if not os.path.exists(folder_path):
+                        os.makedirs(folder_path)
+                        if print_details: print(f"Folder '{folder_path}' created.")
+                    else:
+                        if print_details: print(f"Folder '{folder_path}' already exists.")
+                        # Create index.html in the folder from the template
+                    index_file_path = os.path.join(folder_path, 'index.html')
 
                 # Replace placeholders in the template
                 index_content = template_content.replace('{{ title }}', title) \
