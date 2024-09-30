@@ -16,7 +16,7 @@ def parse_arguments():
                         help="Template file path (default: template.html)")
     parser.add_argument('--error-page', type=str, default='404.html', 
                         help="Error page file path (default: 404.html)")
-    parser.add_argument('-p', '--print', action='store_true', 
+    parser.add_argument('-p', '--print', type=bool, default=True,
                         help="Print details of the generated files")
     return parser.parse_args()
 
@@ -28,19 +28,20 @@ def main():
     parent_folder = args.parent_folder
     template_file = args.template_file
     error_page_file = args.error_page
+    print_details = args.print
 
     # Remove the parent folder if it exists, then recreate it
     if os.path.exists(parent_folder):
         shutil.rmtree(parent_folder)
-        print(f"Folder '{parent_folder}' removed.")
+        print_details: print(f"Folder '{parent_folder}' removed.")
         
     os.makedirs(parent_folder)
-    print(f"Folder '{parent_folder}' created.")
+    print_details: print(f"Folder '{parent_folder}' created.")
 
     # Copy the 404.html file into the _site folder
     if os.path.exists(error_page_file):
         shutil.copy(error_page_file, parent_folder)
-        print(f"File '{error_page_file}' copied to '{parent_folder}'.")
+        if print_details: print(f"File '{error_page_file}' copied to '{parent_folder}'.")
     else:
         print(f"Warning: The file '{error_page_file}' does not exist. It was not copied.")
 
@@ -48,8 +49,9 @@ def main():
     try:
         with open(json_file, 'r') as file:
             data = json.load(file)
-            print(f"Contents of {json_file}:")
-            print(json.dumps(data, indent=4))
+            if print_details: 
+                print(f"Contents of {json_file}:")
+                print(json.dumps(data, indent=4))
             
             # Read the template file
             with open(template_file, 'r') as template:
@@ -70,9 +72,9 @@ def main():
                 folder_path = os.path.join(parent_folder, key)
                 if not os.path.exists(folder_path):
                     os.makedirs(folder_path)
-                    print(f"Folder '{folder_path}' created.")
+                    if print_details: print(f"Folder '{folder_path}' created.")
                 else:
-                    print(f"Folder '{folder_path}' already exists.")
+                    if print_details: print(f"Folder '{folder_path}' already exists.")
 
                 # Create index.html in the folder from the template
                 index_file_path = os.path.join(folder_path, 'index.html')
@@ -86,7 +88,7 @@ def main():
                 # Write to index.html, overwriting if it exists
                 with open(index_file_path, 'w') as index_file:
                     index_file.write(index_content)
-                print(f"File '{index_file_path}' created")
+                if print_details: print(f"File '{index_file_path}' created")
 
     except FileNotFoundError as e:
         print(f"Error: {e}")
