@@ -1,0 +1,12 @@
+{
+  "shortname": {
+    "url": "https://example.com",
+    "image": "https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg",
+    "title": "Example",
+    "description": "Example",
+    "comment": "Optional field"
+  },
+  "example": {
+    "url": "https://example.com"
+  }
+}
