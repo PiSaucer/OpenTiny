@@ -17,9 +17,12 @@
     <script>
         // Check if the current URL is in lowercase
         const originalUrl = window.location.href;
-        const lowercaseUrl = originalUrl.toLowerCase();
+        const urlParts = originalUrl.split('/');
+        const lastSegment = urlParts.pop();
 
-        if (originalUrl !== lowercaseUrl) {
+        // Check if the last segment is in uppercase
+        if (lastSegment !== lastSegment.toLowerCase()) {
+            const lowercaseUrl = [...urlParts, lastSegment.toLowerCase()].join('/');
             // Redirect to the lowercase version of the URL
             window.location.href = lowercaseUrl;
         }
