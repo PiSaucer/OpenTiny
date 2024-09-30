@@ -1,4 +1,5 @@
 .DS_STORE
 .vscode/
 _site/
-url.json
+*.json
+!url-example.json
