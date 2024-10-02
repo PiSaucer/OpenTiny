@@ -20,7 +20,7 @@ jobs:
 
     - name: Run the script
       run: |
-        python generate.py -j url-example.json -o _site -t template.html --error-page 404.html
+        python generate.py -j url-example.json -o _site -t template.html --error-page 404.html --config-file config-example.json
 
     - name: Configure Git
       run: |

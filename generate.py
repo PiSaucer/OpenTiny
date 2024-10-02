@@ -14,11 +14,48 @@ def parse_arguments():
                         help="Parent folder name (default: _site)")
     parser.add_argument('-t', '--template-file', type=str, default='template.html', 
                         help="Template file path (default: template.html)")
+    parser.add_argument('-c', '--config-file', type=str, default='config.json',
+                        help="Config file path (default: config.json)")
     parser.add_argument('--error-page', type=str, default='404.html', 
                         help="Error page file path (default: 404.html)")
+    parser.add_argument('-s', '--sitemap', type=str, default='sitemap.xml',
+                        help="Sitemap file path (default: sitemap.xml)")
     parser.add_argument('-p', '--print', type=bool, default=True,
-                        help="Print details of the generated files")
+                        help="Print details of the generated files (default: True)")
     return parser.parse_args()
+
+# Function to load the base URL from config file
+def load_config(config_file):
+    try:
+        with open(config_file, 'r') as file:
+            config = json.load(file)
+            return config
+    except FileNotFoundError:
+        print(f"Warning: The configuration file '{config_file}' does not exist. Using empty base URL.")
+        return ''
+    except json.JSONDecodeError:
+        print(f"Error: The file '{config_file}' is not a valid JSON file.")
+        return ''
+
+# Function to generate a sitemap
+def generate_sitemap(data, parent_folder, base_url):
+    sitemap_path = os.path.join(parent_folder, 'sitemap.xml')
+    pages = []
+
+    for key in data.keys():
+        pages.append(key)
+
+    # Create the XML content for the sitemap
+    xml_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    for page in pages:
+        xml_content += f'  <url>\n\t\t<loc>{base_url}/{page}/</loc>\n\t</url>\n'
+    xml_content += '</urlset>'
+
+    # Write the sitemap to the file
+    with open(sitemap_path, 'w') as sitemap_file:
+        sitemap_file.write(xml_content)
+    return sitemap_path
 
 # Main function
 def main():
@@ -29,19 +66,27 @@ def main():
     template_file = args.template_file
     error_page_file = args.error_page
     print_details = args.print
+    sitemap_path = args.sitemap
+
+    # Load base URL from config file
+    config = load_config(args.config_file)
+    base_url = config.get('base_url', '')
 
     # Remove the parent folder if it exists, then recreate it
     if os.path.exists(parent_folder):
         shutil.rmtree(parent_folder)
-        print_details: print(f"Folder '{parent_folder}' removed.")
+        if print_details: 
+            print(f"Folder '{parent_folder}' removed.")
         
     os.makedirs(parent_folder)
-    print_details: print(f"Folder '{parent_folder}' created.")
+    if print_details: 
+        print(f"Folder '{parent_folder}' created.")
 
     # Copy the 404.html file into the _site folder
     if os.path.exists(error_page_file):
         shutil.copy(error_page_file, parent_folder)
-        if print_details: print(f"File '{error_page_file}' copied to '{parent_folder}'.")
+        if print_details: 
+            print(f"File '{error_page_file}' copied to '{parent_folder}'.")
     else:
         print(f"Warning: The file '{error_page_file}' does not exist. It was not copied.")
 
@@ -93,6 +138,10 @@ def main():
                 with open(index_file_path, 'w') as index_file:
                     index_file.write(index_content)
                 if print_details: print(f"File '{index_file_path}' created")
+
+            # Generate the sitemap after creating all the pages
+            sitemap_path = generate_sitemap(data, parent_folder, base_url)
+            if print_details: print(f"Sitemap generated at '{sitemap_path}'")
 
     except FileNotFoundError as e:
         print(f"Error: {e}")

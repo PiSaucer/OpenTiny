@@ -2,4 +2,6 @@
 .vscode/
 _site/
 *.json
-!url-example.json
+*.xml
+
+!*-example.json
