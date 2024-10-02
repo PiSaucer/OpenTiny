@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-		<loc>http://pisaucer.com/index/</loc>
+		<loc>https://pisaucer.github.io/OpenTiny/index/</loc>
 	</url>
   <url>
-		<loc>http://pisaucer.com/shortname/</loc>
+		<loc>https://pisaucer.github.io/OpenTiny/shortname/</loc>
 	</url>
   <url>
-		<loc>http://pisaucer.com/example/</loc>
+		<loc>https://pisaucer.github.io/OpenTiny/example/</loc>
 	</url>
 </urlset>
